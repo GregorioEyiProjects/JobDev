@@ -1,0 +1,1 @@
+//Keys de AsyncStorage, endpoints
