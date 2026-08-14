@@ -1,56 +1,181 @@
-# Welcome to your Expo app 👋
+# DevJobs
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil de búsqueda de ofertas de trabajo tech, construida con React Native y Expo como proyecto de portfolio. Desarrollada en paralelo con los estudios de Ingeniería de Software y con el proyecto freelance [AnaGlor Studio](https://www.anaglorstudio.com/) — un estudio de Pilates en Madrid para el que desarrollé la web completa simultáneamente.
 
-## Get started
+---
 
-1. Install dependencies
+## Capturas
 
-   ```bash
-   npm install
-   ```
+![Home page](./screenshots/onBoarding1.jpeg)
+![Home page](./screenshots/onBoarding2.jpeg)
+![Home page](./screenshots/onBoarding3.jpeg)
+![Home page](./screenshots/loginScreen.jpeg)
+![Home page](./screenshots/registerScreen.jpeg)
+![Home page](./screenshots/forgotPasswordScreen.jpeg)
+![Home page](./screenshots/checkYourEmailScreen.jpeg)
+![Home page](./screenshots/homeLoading.jpeg)
+![Home page](./screenshots/homeScreen.jpeg)
+![Home page](./screenshots/savedScreen.jpeg)
+![Home page](./screenshots/profileScreenES.jpeg)
+![Home page](./screenshots/profileScreenEN.jpeg)
+![Home page](./screenshots/detailScreen.jpeg)
+![Home page](./screenshots/savedScreen2.jpeg)
+![Home page](./screenshots/FulltimeFilter.jpeg)
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## Stack
 
-In the output, you'll find options to open the app in a
+| Capa               | Tecnología                       |
+| ------------------ | -------------------------------- |
+| Framework          | React Native + Expo SDK 56       |
+| Navegación         | Expo Router (file-based routing) |
+| Backend / Auth     | Supabase (JWT + SecureStore)     |
+| Base de datos      | Supabase (PostgreSQL + RLS)      |
+| Ofertas de trabajo | JSearch API (RapidAPI)           |
+| Estado global      | Zustand                          |
+| Formularios        | react-hook-form + Zod            |
+| Iconos             | @expo/vector-icons (Ionicons)    |
+| i18n               | Sistema propio (ES / EN)         |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Funcionalidades implementadas
 
-## Get a fresh project
+### Autenticación
 
-When you're ready, run:
+- Onboarding de 3 slides con FlatList horizontal
+- Registro con validación de contraseña en tiempo real
+- Login con Supabase Auth
+- Confirmación de email
+- Recuperación de contraseña
+- Guardia de navegación en `_layout.jsx` con `onAuthStateChange`
 
-```bash
-npm run reset-project
+### Búsqueda de ofertas
+
+- Búsqueda en tiempo real con debounce de 500ms
+- Filtros por tipo de empleo (Remoto, Full-time, Contrato)
+- Paginación infinita
+- Caché en memoria para evitar llamadas duplicadas
+- Skeletons animados durante la carga
+- Estado de error con botón de reintento
+
+### Detalle de oferta
+
+- Salario, ubicación, tipo de contrato
+- Descripción, responsabilidades y requisitos
+- Botón "Aplicar ahora" que abre el link real con `Linking.openURL`
+
+### Favoritos
+
+- Guardar y quitar favoritos con actualización optimista
+- Persistencia en Supabase vinculada al usuario autenticado
+- Sincronización entre dispositivos con la misma cuenta
+- Políticas RLS para que cada usuario solo acceda a sus datos
+
+### Perfil
+
+- Avatar con iniciales generado automáticamente
+- Contador de ofertas guardadas en tiempo real
+- Toggle de idioma ES / EN con persistencia en AsyncStorage
+- Logout con confirmación
+
+### Internacionalización
+
+- Sistema propio sin dependencias externas
+- Cadenas separadas por pantalla en `src/i18n/`
+- Hook `useTranslation()` con la misma firma que react-i18next para facilitar migración futura
+- Store independiente con Zustand + AsyncStorage
+
+---
+
+## Arquitectura
+
+```
+app/
+├── _layout.jsx              # Guardia de navegación + carga de estado inicial
+├── (auth)/
+│   ├── onboarding.jsx
+│   ├── login.jsx
+│   ├── register.jsx
+│   ├── forgot-password.jsx
+│   └── confirm-email.jsx
+├── (tabs)/
+│   ├── _layout.jsx          # Tab bar con Ionicons
+│   ├── index.jsx            # HomeScreen
+│   ├── saved.jsx            # SavedScreen
+│   └── profile.jsx          # ProfileScreen
+└── job/[id].jsx             # DetailScreen
+
+src/
+├── theme/                   # Sistema de diseño (colors, typography, spacing)
+├── i18n/                    # Traducciones ES / EN
+├── services/
+│   ├── supabase.js
+│   └── jsearch.js
+├── hooks/
+│   ├── useJobs.js           # Búsqueda + debounce + caché + paginación
+│   └── useTranslation.js
+├── store/
+│   ├── savedStore.js        # Favoritos sincronizados con Supabase
+│   └── languageStore.js     # Idioma persistido en AsyncStorage
+├── components/
+│   ├── job/
+│   │   ├── JobCard.jsx
+│   │   └── JobCardSkeleton.jsx
+│   ├── home/
+│   │   └── ListHeaderComponent.jsx
+│   └── profile/
+│       └── SettingRow.jsx
+├── styles/                  # Archivos .styles.js por pantalla
+├── schemas/                 # Zod schemas
+└── utils/
+    └── formatters.js
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-### Other setup steps
+## Pendiente / No implementado
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Estas funcionalidades están planificadas pero no completadas, principalmente por dos razones: el plan gratuito de JSearch (RapidAPI) tiene un límite de 200 llamadas al mes que se agotó durante el desarrollo, y el tiempo disponible estuvo repartido entre los estudios de Ingeniería de Software y el desarrollo simultáneo de [AnaGlor Studio](https://www.anaglorstudio.com/).
 
-## Learn more
+- **Traducción completa de la app** — el sistema de i18n está implementado y funciona en ProfileScreen, pero HomeScreen, SavedScreen y DetailScreen aún usan cadenas en español directamente. La arquitectura está lista para extenderlo.
+- **Datos mock** — sin un fallback de datos locales, la app queda inutilizable al agotar el límite de la API. Pendiente crear `mockJobs.js` con un flag `USE_MOCK` en `jsearch.js`.
+- **Seguimiento de aplicaciones** — el contador "Aplicados" en el perfil está hardcodeado a 0. Requeriría una tabla `applied_jobs` en Supabase similar a `saved_jobs`.
+- **Editar perfil** — nombre y foto de perfil desde Supabase Storage.
+- **Notificaciones push** — alertas de nuevas ofertas con Expo Notifications.
+- **Tests** — sin cobertura de tests unitarios ni de integración.
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Instalación
 
-## Join the community
+```bash
+git clone https://github.com/tuusuario/devjobs
+cd devjobs
+npm install
+```
 
-Join our community of developers creating universal apps.
+Crea un archivo `.env` con tus claves:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+EXPO_PUBLIC_SUPABASE_URL=tu_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+EXPO_PUBLIC_RAPIDAPI_KEY=tu_rapidapi_key
+```
+
+```bash
+npx expo start
+```
+
+---
+
+## Otros proyectos
+
+Durante el desarrollo de DevJobs trabajé en paralelo en **[AnaGlor Studio](https://www.anaglorstudio.com/)**, web para un estudio de Pilates en Madrid. Dark theme, diseño editorial y rendimiento mobile-first.
+
+---
+
+## Autor
+
+Graduado en Ingeniería de Software — aprendiendo React Native, Supabase y diseño de producto construyendo cosas reales.
