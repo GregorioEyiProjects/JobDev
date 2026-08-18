@@ -6,21 +6,10 @@ Aplicación móvil de búsqueda de ofertas de trabajo tech, construida con React
 
 ## Capturas
 
-![Home page](./screenshots/onBoarding1.jpeg)
-![Home page](./screenshots/onBoarding2.jpeg)
-![Home page](./screenshots/onBoarding3.jpeg)
-![Home page](./screenshots/loginScreen.jpeg)
-![Home page](./screenshots/registerScreen.jpeg)
-![Home page](./screenshots/forgotPasswordScreen.jpeg)
-![Home page](./screenshots/checkYourEmailScreen.jpeg)
-![Home page](./screenshots/homeLoading.jpeg)
-![Home page](./screenshots/homeScreen.jpeg)
-![Home page](./screenshots/savedScreen.jpeg)
-![Home page](./screenshots/profileScreenES.jpeg)
-![Home page](./screenshots/profileScreenEN.jpeg)
-![Home page](./screenshots/detailScreen.jpeg)
-![Home page](./screenshots/savedScreen2.jpeg)
-![Home page](./screenshots/FulltimeFilter.jpeg)
+![Home page](./screenshots/onboarding.png)
+![Home page](./screenshots/auth.png)
+![Home page](./screenshots/appFlow.png)
+![Home page](./screenshots/profileScreen.png)
 
 ---
 
